@@ -1,31 +1,62 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34202.233
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Завдання 2", "Завдання 2\Завдання 2.vcxproj", "{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Debug|x64.ActiveCfg = Debug|x64
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Debug|x64.Build.0 = Debug|x64
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Debug|x86.ActiveCfg = Debug|Win32
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Debug|x86.Build.0 = Debug|Win32
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Release|x64.ActiveCfg = Release|x64
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Release|x64.Build.0 = Release|x64
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Release|x86.ActiveCfg = Release|Win32
-		{72543460-2EEC-4E6E-AD1C-E45E3C66BC55}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2BFEA1EE-62F8-4B21-B38F-9639AB408A1A}
-	EndGlobalSection
-EndGlobal
+#include <iostream>//для синтаксису
+#include <ctime>//для генерації
+#include <climits>//для INT MAX
+
+const int rows = 3;//3 рядки
+const int columns = 5;//5 стовпців
+
+// Функція для виведення двовимірного масиву
+void printArray(int p[rows][columns]) {//оголошення назви масиву
+    for (int i = 0; i < rows; ++i) {//прописати для всіх значень рядків
+        for (int j = 0; j < columns; ++j) {//аналогічно стовпців
+            std::cout << p[i][j] << " ";//прописати попередні значення для наявності змінної прінт ерей в пам'яті
+        }
+        std::cout << std::endl;//вивести і закінчити
+    }
+}
+
+// Функція для отримання нової матриці шляхом множення на найменший елемент за модулем
+void min(int p[rows][columns]) {//оголошення змінної
+    int minabsolut = INT_MAX;//змінна мінімального абсолютного значення - найменшого за модулем
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            int absolut = std::abs(p[i][j]);//знаходження найменшого - абс потрібен для модуля
+            if (absolut < minabsolut) {//перевірка для кожного значення окремо
+                minabsolut = absolut;
+            }
+        }
+    }
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            p[i][j] *= minabsolut;//функція множення кожного елемента окремо на мінімальне абсолютне значення
+        }
+    }
+}
+
+int main() {//оголошення змінної мейн для виводду кінцевого результата у змінній інт
+    setlocale(LC_ALL, "ukr");//локалізація
+    int p[rows][columns];//оголошення масиву
+    std::srand(std::time(0));//початкове значення ля випадкових значень
+
+    // Заповнення масиву випадковими значеннями
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            do {
+                p[i][j] = std::rand() % 21 - 10;  // Генерація випадкового числа від -10 до 10
+            } while (p[i][j] == 0 || p[i][j] == 1 || p[i][j] == -1);//виключення значень: 0,1 і -1 для наглядності прикладів
+        }
+    }
+
+    std::cout << "Початковий масив:\n";
+    printArray(p);//вивод на екран початково масиву
+
+    // Отримання нової матриці шляхом множення на найменший елемент за модулем
+    min(p);
+
+    std::cout << "\nМатриця після множення на найменший елемент за модулем:\n";
+    printArray(p);//вивід кінцевого масиву (пілся обрахувань)
+
+    return 0;//вивести 0 - як кінець операції
+}
